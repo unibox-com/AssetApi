@@ -143,7 +143,7 @@ class AssetController extends BaseController
 		*/
         //SMS notice && Email notice
         $Notice = new \Common\Common\Notice();
-        $Notice->notice(C('NOTICE.NT_ASSET_HAS_PACKAGE_TO_PICK'), $memberId, [
+        $Notice->notice(C('NOTICE.NT_ASSET_HAS_PACKAGE_TO_PICK'), $this->_memberId, [
             //'cabinet_id' => $this->_cabinetId,
 		    'cabinet_id' => $productinfo['cabinet_id'],
             'pick_code' => $pickCode,  
