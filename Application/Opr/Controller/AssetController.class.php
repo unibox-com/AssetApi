@@ -131,6 +131,7 @@ class AssetController extends BaseController
         if(empty($boxId))       { $this->ret(6);}	
 		//发邮件
 	    // async send notice
+		/*
         S(C('redis_config'))->proxy('RPUSH', 'async_notice', json_encode([
             'notice_tpl' => C('NOTICE.NT_ASSET_HAS_PACKAGE_TO_PICK'),
             'member_id' =>$this->_memberId,
@@ -139,7 +140,14 @@ class AssetController extends BaseController
                 'pick_code' => $pickCode,
             ]
         ]));	
-
+		*/
+        //SMS notice && Email notice
+        $Notice = new \Common\Common\Notice();
+        $Notice->notice(C('NOTICE.NT_ASSET_HAS_PACKAGE_TO_PICK'), $memberId, [
+            //'cabinet_id' => $this->_cabinetId,
+		    'cabinet_id' => $productinfo['cabinet_id'],
+            'pick_code' => $pickCode,  
+        ]);
 		//更新rental状态	
         $wh=['rfid'=>$productinfo['rfid'],];
 		//更新INVENTORY状态
