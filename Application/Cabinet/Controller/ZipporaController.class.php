@@ -2956,7 +2956,7 @@ class ZipporaController extends BaseController {
             // 'box_id' => array('exp', 'is not null'),
             // 'pick_time' => array('exp', 'is null'),
         // ]));
-
+        /*
         foreach($storeList as $sto) {
             $box = D('CabinetBox')->getBodyBox($sto['box_id']);
             $res['pickList'][] = [
@@ -2969,10 +2969,10 @@ class ZipporaController extends BaseController {
                 'isAllocable' => $box['is_allocable'],
             ];
         }
-
+        */
          $this->ret(0, $storeList);
 
-        $this->ret(0, $res);
+        //$this->ret(0, $res);
     }
     /**
      * @apiDefine getPickListPickMart
