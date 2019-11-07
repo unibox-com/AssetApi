@@ -2970,7 +2970,7 @@ class ZipporaController extends BaseController {
             ];
         }
 
-        
+         $this->ret(0, $storeList);
 
         $this->ret(0, $res);
     }
