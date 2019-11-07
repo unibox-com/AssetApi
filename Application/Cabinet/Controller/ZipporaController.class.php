@@ -2953,7 +2953,7 @@ class ZipporaController extends BaseController {
             ); 
 		
 		$storeList=D('ProductInventory')->getProductInventoryList($wh);
-		$tem=$storeList['box_id'];
+		$tem=$storeList[]['box_id'];
         /*
         foreach($storeList as $sto) {
 			//$tem='10854';
