@@ -2938,7 +2938,7 @@ class ZipporaController extends BaseController {
 
         $memberId = I('post.memberId');
         $passedDays = I('post.passedDays');
-		$storeArr = array();
+		$storeList = array();
 	    $wh1=
 		    [
 		      'product_status_code' => '1',
@@ -2951,7 +2951,9 @@ class ZipporaController extends BaseController {
               $wh2,
               '_logic' => 'or'
             ); 
+		
 		$storeList=D('ProductInventory')->getProductInventoryList($wh);
+		$tem=$storeList['box_id'];
         /*
         foreach($storeList as $sto) {
 			//$tem='10854';
@@ -2967,7 +2969,7 @@ class ZipporaController extends BaseController {
             ];
         }
         */
-         $this->ret(0, $storeList);
+         $this->ret(0, $tem);
 
         //$this->ret(0, $res);
     }
