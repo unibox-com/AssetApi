@@ -1748,11 +1748,12 @@ class ZipporaController extends BaseController {
         ]));	 */
 		
         //SMS notice && Email notice
-        $Notice = new \Common\Common\Notice();
-        $Notice->notice(C('NOTICE.NT_ASSET_RENT'), $memberId, [
-           'cabinet_id' => $this->_cabinetId,
+        //$Notice = new \Common\Common\Notice();
+        //$Notice->notice(C('NOTICE.NT_ASSET_RENT'), $memberId, [
+        //   'cabinet_id' => $this->_cabinetId,
 		   
-        ]);
+        //]);
+		
         // $wh=['rfid'=>$rfId,];
 		//更新INVENTORY状态
         $store = [
@@ -2838,102 +2839,141 @@ class ZipporaController extends BaseController {
      * @sendSampleRequest
      */
 
-    public function getPickList() {
+    // public function getPickList() {
+
+        // $memberId = I('post.memberId');
+        // $passedDays = I('post.passedDays');
+
+        // if($passedDays) {
+
+            // //$passedDays++;
+            // //$storeArr       = $this->getStoreArr(null, null, null, null, null, [
+            // //    'store_time' => ['lt', strtotime(-$passedDays.' day')],//超过3天的订单
+            // //]);
+            // $storeArr       = $this->getStoreArr(null, null, null, null, null, []);
+
+            // if(empty($storeArr)) {
+                // $this->ret(3);
+            // }
+
+            // foreach($storeArr as $store) {
+
+                // $toMember = D('OMemberOrganization')->getMember($store['toMemberId'], $this->_cabinetId);
+                // $res['pickList'][] = [
+                    // 'lockAddr' => $store['lockAddr'],
+                    // 'boxAddr' => $store['boxAddr'],
+                    // 'bodySequence' => $store['bodySequence'],
+                    // 'isAllocable' => $store['isAllocable'],
+                    // 'storeId' => $store['storeId'],
+                    // 'storeTime' => $store['storeTime'],
+                    // 'memberName' => $toMember['first_name'].' '.$toMember['last_name'],
+                    // 'unitName' => $toMember['unit_name'],
+                // ];
+            // }
+        // } else {
+
+            // if (!$memberId) { $this->ret(2);}
+
+            // $storeArr       = $this->getStoreArr($memberId);
+
+            // if(empty($storeArr)) {
+                // $this->ret(3);
+            // }
+
+            // if(!D('Wallet')->checkWallet($memberId)) {
+               // // if(!D('CardCredit')->checkCard($memberId)) {
+              // //      $this->ret(5);
+              // //  } else {
+                    // $this->ret(4);
+             // //   }
+            // }
+
+
+            // $cFlag = I('post.cFlag') ? True : False;
+
+            // // update box.status
+            // foreach($storeArr as $store) {
+
+                // if($cFlag) {
+
+                    // $now = time();
+
+                    // //charge store
+                    // $box = D('CabinetBox')->getBox($store['boxId']);
+                    // $apartment = D('OOrganization')->getApartment($this->_apartmentId);
+                    // $ret = D('OCharge')->charge(
+                        // $store['toMemberId'],
+                        // $apartment['organization_id'],
+                        // $apartment['charge_rule'],
+                        // 'box_penalty', [
+                            // 'storeId' => $store['storeId'],
+                            // 'boxModelId' => $box['box_model_id'],
+                            // 'storeTime' => $store['storeTime'],
+                        // ]
+                    // );
+
+                    // // update o_store pick_time, pick_with
+                    // D('OStore')->updateStore($store['storeId'], [
+                        // 'pick_time' => $now,
+                        // 'pick_with' => 'app',
+                        // 'pick_fee' => $ret['amount'],
+                    // ]);
+
+                    // D('CabinetBox')->releaseBox($store['boxId']);
+                // }
+
+                // $res['pickList'][] = [
+                    // 'lockAddr' => $store['lockAddr'],
+                    // 'boxAddr' => $store['boxAddr'],
+                    // 'bodySequence' => $store['bodySequence'],
+                    // 'isAllocable' => $store['isAllocable'],
+                    // 'storeId' => $store['storeId'],
+                // ];
+            // }
+        // }
+
+        // $this->ret(0, $res);
+    // }
+        public function getPickList() {
 
         $memberId = I('post.memberId');
         $passedDays = I('post.passedDays');
+		$storeArr = array();
+	    $wh1=
+		    [
+		      'product_status_code' => '1',
+		    ];
+		$wh2=[
+		      'product_status_code' => '2',
+		    ];
+	    $wh['_complex'] = array(
+              $wh1,
+              $wh2,
+              '_logic' => 'or'
+            ); 
+		$storeList=D('ProductInventory')->getMember($wh);
+        // $storeList= D('OStore')->getStoreList(array_merge($wh, [
+            // 'box_id' => array('exp', 'is not null'),
+            // 'pick_time' => array('exp', 'is null'),
+        // ]));
 
-        if($passedDays) {
-
-            //$passedDays++;
-            //$storeArr       = $this->getStoreArr(null, null, null, null, null, [
-            //    'store_time' => ['lt', strtotime(-$passedDays.' day')],//超过3天的订单
-            //]);
-            $storeArr       = $this->getStoreArr(null, null, null, null, null, []);
-
-            if(empty($storeArr)) {
-                $this->ret(3);
-            }
-
-            foreach($storeArr as $store) {
-
-                $toMember = D('OMemberOrganization')->getMember($store['toMemberId'], $this->_cabinetId);
-                $res['pickList'][] = [
-                    'lockAddr' => $store['lockAddr'],
-                    'boxAddr' => $store['boxAddr'],
-                    'bodySequence' => $store['bodySequence'],
-                    'isAllocable' => $store['isAllocable'],
-                    'storeId' => $store['storeId'],
-                    'storeTime' => $store['storeTime'],
-                    'memberName' => $toMember['first_name'].' '.$toMember['last_name'],
-                    'unitName' => $toMember['unit_name'],
-                ];
-            }
-        } else {
-
-            if (!$memberId) { $this->ret(2);}
-
-            $storeArr       = $this->getStoreArr($memberId);
-
-            if(empty($storeArr)) {
-                $this->ret(3);
-            }
-
-            if(!D('Wallet')->checkWallet($memberId)) {
-               // if(!D('CardCredit')->checkCard($memberId)) {
-              //      $this->ret(5);
-              //  } else {
-                    $this->ret(4);
-             //   }
-            }
-
-
-            $cFlag = I('post.cFlag') ? True : False;
-
-            // update box.status
-            foreach($storeArr as $store) {
-
-                if($cFlag) {
-
-                    $now = time();
-
-                    //charge store
-                    $box = D('CabinetBox')->getBox($store['boxId']);
-                    $apartment = D('OOrganization')->getApartment($this->_apartmentId);
-                    $ret = D('OCharge')->charge(
-                        $store['toMemberId'],
-                        $apartment['organization_id'],
-                        $apartment['charge_rule'],
-                        'box_penalty', [
-                            'storeId' => $store['storeId'],
-                            'boxModelId' => $box['box_model_id'],
-                            'storeTime' => $store['storeTime'],
-                        ]
-                    );
-
-                    // update o_store pick_time, pick_with
-                    D('OStore')->updateStore($store['storeId'], [
-                        'pick_time' => $now,
-                        'pick_with' => 'app',
-                        'pick_fee' => $ret['amount'],
-                    ]);
-
-                    D('CabinetBox')->releaseBox($store['boxId']);
-                }
-
-                $res['pickList'][] = [
-                    'lockAddr' => $store['lockAddr'],
-                    'boxAddr' => $store['boxAddr'],
-                    'bodySequence' => $store['bodySequence'],
-                    'isAllocable' => $store['isAllocable'],
-                    'storeId' => $store['storeId'],
-                ];
-            }
+        foreach($storeList as $sto) {
+            $box = D('CabinetBox')->getBodyBox($sto['box_id']);
+            $res['pickList'][] = [
+                'storeId'     => $sto['box_id'],
+                'boxId'       => $box['box_id'],
+                'cabinetId'   => $box['cabinet_id'],
+                'lockAddr'    => $box['lock_addr'],
+                'boxAddr'     => $box['box_addr'],
+                'bodySequence' => $box['body_sequence'],
+                'isAllocable' => $box['is_allocable'],
+            ];
         }
+
+        
 
         $this->ret(0, $res);
     }
-    
     /**
      * @apiDefine getPickListPickMart
      * @apiParam {String} accessToken
