@@ -2952,8 +2952,9 @@ class ZipporaController extends BaseController {
               '_logic' => 'or'
             ); 
 		$storeList=D('ProductInventory')->getMember($wh);
-        
+        /*
         foreach($storeList as $sto) {
+			//$tem='10854';
             $box = D('CabinetBox')->getBodyBox($sto['box_id']);
             $res['pickList'][] = [
                 'storeId'     => $sto['box_id'],
@@ -2965,10 +2966,10 @@ class ZipporaController extends BaseController {
                 'isAllocable' => $box['is_allocable'],
             ];
         }
-        
-        // $this->ret(0, $storeList);
+        */
+         $this->ret(0, $storeList);
 
-        $this->ret(0, $res);
+        //$this->ret(0, $res);
     }
     /**
      * @apiDefine getPickListPickMart
