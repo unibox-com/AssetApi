@@ -2951,7 +2951,7 @@ class ZipporaController extends BaseController {
               $wh2,
               '_logic' => 'or'
             ); 
-		$storeList[]=D('ProductInventory')->getMember($wh);
+		$storeList=D('ProductInventory')->getProductInventoryList($wh);
         /*
         foreach($storeList as $sto) {
 			//$tem='10854';
