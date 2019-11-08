@@ -18,7 +18,20 @@ class ProductInventoryModel extends Model{
     public function getProductInventoryList($wh = array()){
         return $this->where($wh)->select();
     }
+	public function getListArr($wh = array()){
+        $list = $this->getProductInventoryList($wh);
+        foreach($list as $k => $c) {
+            $arr[$c['Inventory']] = [
+                'product_inventory_id' => $c['product_inventory_id'],
+                'product_id' => $c['product_id'],
+				'cabinet_id' => $c['cabinet_id'],
+				'box_id' => $c['box_id'],
+            ];
+        }
+        return $arr;
 	
+		//return $list;
+    }
 	public function getProductInventoryListN($wh = array()){
 		$mem = $this
 		    ->alias('t') 

@@ -2952,8 +2952,8 @@ class ZipporaController extends BaseController {
               '_logic' => 'or'
             ); 
 		
-		$storeList['data1']=D('ProductInventory')->getProductInventoryList($wh);
-		$tem=$storeList['data1']['box_id'];
+		$storeList=D('ProductInventory')->getListArr($wh);
+		//$tem=$storeList['box_id'];
         /*
         foreach($storeList as $sto) {
 			//$tem='10854';
@@ -2969,7 +2969,7 @@ class ZipporaController extends BaseController {
             ];
         }
         */
-         $this->ret(0, $tem);
+         $this->ret(0, $storeList);
 
         //$this->ret(0, $res);
     }
