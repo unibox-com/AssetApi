@@ -2953,13 +2953,12 @@ class ZipporaController extends BaseController {
             ); 
 		
 		$storeList=D('ProductInventory')->getListArr($wh);
-		//$tem=$storeList['box_id'];
-        /*
         foreach($storeList as $sto) {
-			//$tem='10854';
+			//
             $box = D('CabinetBox')->getBodyBox($sto['box_id']);
             $res['pickList'][] = [
-                'storeId'     => $sto['box_id'],
+                'product_inventory_id'=> $sto['product_inventory_id'],
+                'product_id'=> $sto['product_id'],
                 'boxId'       => $box['box_id'],
                 'cabinetId'   => $box['cabinet_id'],
                 'lockAddr'    => $box['lock_addr'],
@@ -2968,10 +2967,8 @@ class ZipporaController extends BaseController {
                 'isAllocable' => $box['is_allocable'],
             ];
         }
-        */
-         $this->ret(0, $storeList);
 
-        //$this->ret(0, $res);
+      $this->ret(0, $res);
     }
     /**
      * @apiDefine getPickListPickMart

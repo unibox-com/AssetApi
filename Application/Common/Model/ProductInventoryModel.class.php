@@ -21,7 +21,7 @@ class ProductInventoryModel extends Model{
 	public function getListArr($wh = array()){
         $list = $this->getProductInventoryList($wh);
         foreach($list as $k => $c) {
-            $arr[$c['product_inventory_id']] = [
+            $arr[] = [
                 'product_inventory_id' => $c['product_inventory_id'],
                 'product_id' => $c['product_id'],
 				'cabinet_id' => $c['cabinet_id'],
