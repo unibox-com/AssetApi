@@ -391,7 +391,7 @@ class ZipporaController extends BaseController {
      */
 
 	 /** asset
-     * @api {post} /zippora/commitForAssetRentN 15-commitForAssetRentN
+     * @api {post} /zippora/commitForAssetRentN 20-commitForAssetRentN
      * @apiDescription 操作员重置
      * @apiName commitForAssetRentN
      * @apiUse commitForAssetRentN
