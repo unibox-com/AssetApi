@@ -389,6 +389,14 @@ class ZipporaController extends BaseController {
      * @apiUse commitForAsset
      * @apiGroup 10-asset
      */
+
+	 /** asset
+     * @api {post} /zippora/commitForAssetRentN 15-commitForAssetRentN
+     * @apiDescription 操作员重置
+     * @apiName commitForAssetRentN
+     * @apiUse commitForAssetRentN
+     * @apiGroup 10-asset
+     */
 	/** asset
      * @api {post} /zippora/releaseBoxid 16-releaseBoxid
      * @apiDescription 取件
@@ -1637,6 +1645,68 @@ class ZipporaController extends BaseController {
             ]
         ]);
     }	
+     /**资产柜借提交
+     * @apiDefine commitForAssetRentN 
+     * @apiParam {String} accessToken
+     * @apiParam {String} inventoryId       库存Id
+     *
+     * @apiSuccess {Number} ret
+            '0' => 'commitForRent success',                                      
+            '1' => 'invalid accesstoken',                                      
+            '2' => 'empty organization id',                           
+            '3' => 'empty inventory id',  
+            '6' => 'empty box id',	
+            '8' => 'update rental table fail',	
+            '9' => 'update inventory table fail',	
+            '10' => 'no the product',				
+     * @apiSuccess {String} msg
+     * @apiSuccess {Object} data
+     * @apiSuccess {Object} data.rent
+     * @apiSuccess {String}   data.rent.rentalId
+     * @apiSuccess {String}   data.rent.memberId
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *     "ret": 0,
+     *     "msg": "commitForAssetRent Success",
+     *     "data": {
+     *         "rent": {
+     *             "rentalIdId": "10007",
+     *             "memberId": "10001",
+     *         }
+     *     }
+     * }
+     * @sendSampleRequest
+     */
+    public function commitForAssetRentN() 
+	{
+
+        $memberId     = I('request.inventoryId');
+        if(empty($memberId))  { $this->ret(3);}
+		$now = time();
+		//
+	    $wh=[
+		'product_inventory_id'=>$memberId,
+		];
+		$productinfo =D('ProductInventory')->getMember($wh);
+	    if(empty($productinfo)) { $this->ret(10);}
+		//释放柜子
+		D('CabinetBox')->releaseBox($productinfo['box_id']);
+
+		//更新INVENTORY状态
+        $store = [
+		    'member_id'=>'0',
+            'update_time' => $now,
+            'product_status_code' => '0',
+            'box_id'=>'0',
+        ];
+        $storeId = D('ProductInventory')->updateMember($wh,$store);
+        if(empty( $storeId))       { $this->ret(9);}
+
+        $this->ret(0, [
+            'rent' => $rental,
+        ]);
+    }
 	 /**资产柜借提交
      * @apiDefine commitForAssetRent 
      * @apiParam {String} accessToken
