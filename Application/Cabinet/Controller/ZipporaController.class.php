@@ -389,14 +389,6 @@ class ZipporaController extends BaseController {
      * @apiUse commitForAsset
      * @apiGroup 10-asset
      */
-
-	 /** asset
-     * @api {post} /zippora/commitForAssetRentN 20-commitForAssetRentN
-     * @apiDescription 操作员重置
-     * @apiName commitForAssetRentN
-     * @apiUse commitForAssetRentN
-     * @apiGroup 10-asset
-     */
 	/** asset
      * @api {post} /zippora/releaseBoxid 16-releaseBoxid
      * @apiDescription 取件
@@ -460,7 +452,15 @@ class ZipporaController extends BaseController {
      * @apiGroup 10-asset
      */	
 	 
-    /**
+	 /** asset
+     * @api {post} /zippora/commitForAssetRentN 20-commitForAssetRentN
+     * @apiDescription 操作员重置
+     * @apiName commitForAssetRentN
+     * @apiUse commitForAssetRentN
+     * @apiGroup 10-asset
+     */
+    
+	/**
      * @api {post} /zippora/testa 01-testa
      * @apiDescription test1
      * @apiName testa
