@@ -3991,8 +3991,8 @@ class ZipporaController extends BaseController {
 
         if ($phone) {
 
-            $storeArr = $this->getStoreArr(null, null, null, $phone, null, $wh);
-            $storeArrPickmart = $this->getStoreArrPickMart(null, null, null, $phone, null, $wh);
+            //$storeArr = $this->getStoreArr(null, null, null, $phone, null, $wh);
+            //$storeArrPickmart = $this->getStoreArrPickMart(null, null, null, $phone, null, $wh);
 			$storeArrAsset = $this->getStoreArrAsset(null, null, null, $phone, null, $wh);
 
         } else if($email) {
@@ -4000,15 +4000,15 @@ class ZipporaController extends BaseController {
             if (!D('Member')->isEmail($email)) $this->ret(4);
             if (empty(D('Member')->getMemberByEmail($email))) $this->ret(5);
 
-            $storeArr = $this->getStoreArr(null, null, null, null, $email, $wh);
-            $storeArrPickmart = $this->getStoreArrPickMart(null, null, null, null, $email, $wh);
+            //$storeArr = $this->getStoreArr(null, null, null, null, $email, $wh);
+            //$storeArrPickmart = $this->getStoreArrPickMart(null, null, null, null, $email, $wh);
 			$storeArrAsset = $this->getStoreArrAsset(null, null, null, null, $email, $wh);
 
         } else {
             $this->ret(2);
         }
-
-        foreach($storeArr as $store) {
+         $this->ret(0, $storeArrAsset);
+/*         foreach($storeArr as $store) {
             S(C('redis_config'))->proxy('RPUSH', 'async_notice', json_encode([
                 'notice_tpl' => C('NOTICE.NT_ZIPPORA_HAS_PACKAGE_TO_PICK'),
                 'member_id' => $store['toMemberId'],
@@ -4040,9 +4040,9 @@ class ZipporaController extends BaseController {
                       ]
              ]));
        }
-        if(empty($storeArr) && empty($storeArrPickmart)) $this->ret(3);
+        if(empty($storeArr) && empty($storeArrPickmart)) $this->ret(3); */
 
-        $this->ret(0);
+        //$this->ret(0);
     }
 
     /**
