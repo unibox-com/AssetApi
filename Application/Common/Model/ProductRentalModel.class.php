@@ -92,6 +92,7 @@ class ProductRentalModel extends Model{
             ->field('
                 t.rental_id,
                 o.product_name as product_name,
+				t.pickup_code,
 			    o.brand as brand,
 				t.cabinet_id,
                 t.box_id,
