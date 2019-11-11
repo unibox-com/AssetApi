@@ -4007,7 +4007,14 @@ class ZipporaController extends BaseController {
         } else {
             $this->ret(2);
         }
-         $this->ret(0, $storeArrAsset);
+		//SMS notice && Email notice
+        $Notice = new \Common\Common\Notice();
+        $Notice->notice(C('NOTICE.NT_ASSET_HAS_PACKAGE_TO_PICK'), $store['toMemberId'], [
+		    'cabinet_id' => $this->_cabinetId,
+            'pick_code' => $store['pickCode'],  
+        ]);
+		
+        $this->ret(0);
 /*         foreach($storeArr as $store) {
             S(C('redis_config'))->proxy('RPUSH', 'async_notice', json_encode([
                 'notice_tpl' => C('NOTICE.NT_ZIPPORA_HAS_PACKAGE_TO_PICK'),
