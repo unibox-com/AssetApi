@@ -26,6 +26,7 @@ class ProductInventoryModel extends Model{
                 'product_id' => $c['product_id'],
 				'cabinet_id' => $c['cabinet_id'],
 				'box_id' => $c['box_id'],
+				'rfid' => $c['rfid'],
             ];
         }
         return $arr;
