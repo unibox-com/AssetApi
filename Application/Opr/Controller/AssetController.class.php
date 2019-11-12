@@ -705,4 +705,56 @@ class AssetController extends BaseController
         }
         $this->ret(0,$courier);
     }
+    //
+    //发送邮件 （资产柜新加）   
+	 /**
+	 * @api {get} /asset/sendMailNew 08-sendMailNew
+     * @apiDescription 发邮件
+     * @apiName sendMailNew
+     * @apiGroup 24-Asset
+     *
+     * @apiParam {String}   _accessToken
+     * @apiParam {String}   _memberId
+     * @apiParam {String}   _toAdd
+     * @apiParam {String}   _content
+     * @apiParam {String}   _subject
+     * @apiParam {String}   _fromAdd
+     *
+     * @apiSuccess {Number} ret
+            '0' => 'success',                                                     
+            '1' => 'invalid accesstoken',                                                                                                                
+     * @apiSuccess {String} msg
+     * @apiSuccess {Object} data
+     * @apiSuccess {Object}   data.member
+     * @apiSuccess {String}     data.member.memberId
+     * @apiSuccess {String}     data.member.rfid
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *     "ret": 0,
+     *     "msg": "Identifycard Success",
+     *     "data": {
+     *         "member": {
+     *             "memberId": "10001",
+     *             "rfid": "123"
+     *         }
+     *     }
+     * }
+
+     * @sendSampleRequest
+     */
+    public function sendMailNew() {
+        $toAdd    = I('request._toAdd');
+        $content    = I('request._content');
+        $subject    = I('request._subject');
+        $fromAdd    = I('request._fromAdd');
+        
+        $toAdd='179238846@qq.com';
+        $subject = '测试一下'; 
+        $content = '我来测试';
+        $headers[] = 'From: admin@zipcodexpress.com';
+        mail($toAdd, $subject, $content, implode("\r\n", $headers));
+        $this->ret(0);
+    }
+    //
 }
