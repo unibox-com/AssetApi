@@ -3026,7 +3026,11 @@ class ZipporaController extends BaseController {
         foreach($storeList as $sto) {
 			//
             $box = D('CabinetBox')->getBodyBox($sto['box_id']);
+			$wh3=$sto['product_id'];
+			$product= D('Product')->getMember($wh3);
             $res['pickList'][] = [
+			    'productname' =>$product['product_name'],
+				'rfid' => $sto['rfid'],
                 'product_inventory_id'=> $sto['product_inventory_id'],
                 'product_id'=> $sto['product_id'],
                 'boxId'       => $box['box_id'],
@@ -3102,8 +3106,6 @@ class ZipporaController extends BaseController {
 
                 $toMember = D('OMemberOrganization')->getMember($store['toMemberId'], $this->_cabinetId);
                 $res['pickList'][] = [
-				    'productname' => $store['product_name'],
-					'rfid' => $store['rfid'],
                     'lockAddr' => $store['lockAddr'],
                     'boxAddr' => $store['boxAddr'],
                     'bodySequence' => $store['bodySequence'],
@@ -4223,13 +4225,13 @@ class ZipporaController extends BaseController {
 		
         foreach($storeList as $sto) {
             $box = D('CabinetBox')->getBodyBox($sto['box_id']);
-			$wh1=$sto['product_inventory_id'];
-			$productinventory = D('ProductInventory')->getMember($wh1);
-			if($productinventory)
-			{
-			  $wh2=$productinventory['product_id'];
-			  $product= D('Product')->getMember($wh2);
-			}
+			// $wh1=$sto['product_inventory_id'];
+			// $productinventory = D('ProductInventory')->getMember($wh1);
+			// if($productinventory)
+			// {
+			  // $wh2=$productinventory['product_id'];
+			  // $product= D('Product')->getMember($wh2);
+			// }
             $storeArr[] = [
                 'storeId'     => $sto['rental_id'],
                 'toMemberId'  => $sto['member_id'],
@@ -4242,8 +4244,8 @@ class ZipporaController extends BaseController {
                 'bodySequence' => $box['body_sequence'],
                 'isAllocable' => $box['is_allocable'],
                 'pickCode'    => $sto['pickup_code'],
-				'rfid'    => $sto['rfid'],
-				'product_name'    => $product['product_name'],
+				//'rfid'    => $sto['rfid'],
+				//'product_name'    => $product['product_name'],
             ];
         }
         return $storeArr;
