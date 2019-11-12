@@ -756,7 +756,8 @@ class AssetController extends BaseController
         //$content = '我来测试';
         //$headers[] = 'From: admin@zipcodexpress.com';
         $headers=$fromAdd;
-        $flag= mail($toAdd, $subject, $content, implode("\r\n", $headers));
+        //$flag= mail($toAdd, $subject, $content, implode("\r\n", $headers));
+        $flag= mail($toAdd, $subject, $content, $headers);
         if($flag)
         {
          $this->ret(0);
