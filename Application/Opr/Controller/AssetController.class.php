@@ -749,12 +749,17 @@ class AssetController extends BaseController
         $subject    = I('request._subject');
         $fromAdd    = I('request._fromAdd');
         
-        $toAdd='179238846@qq.com';
-        $subject = '测试一下'; 
-        $content = '我来测试';
-        $headers[] = 'From: admin@zipcodexpress.com';
-        mail($toAdd, $subject, $content, implode("\r\n", $headers));
-        $this->ret(0);
+        //$toAdd='179238846@qq.com';
+        //$subject = '测试一下'; 
+        //$content = '我来测试';
+        //$headers[] = 'From: admin@zipcodexpress.com';
+        $headers[] =$fromAdd;
+        $flag= mail($toAdd, $subject, $content, implode("\r\n", $headers));
+        if($flag)
+        {
+         $this->ret(0);
+        }
+        $this->ret(1);
     }
     //
 }
