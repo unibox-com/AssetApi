@@ -32,6 +32,7 @@ return array(
         'type' => 'redis',
         'host' => '172.22.0.2',
         'port' => 6389,
+		'password'=>'Lg123',
         'prefix'   => 'asset_',
     ),
 

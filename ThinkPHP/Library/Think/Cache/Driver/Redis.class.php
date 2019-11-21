@@ -42,6 +42,10 @@ class Redis extends Cache {
         $options['timeout'] === false ?
             $this->handler->$func($options['host'], $options['port']) :
             $this->handler->$func($options['host'], $options['port'], $options['timeout']);
+		//增加密码
+		if($this->options['password']){
+		  $this->handler->auth($this->options['password']);
+		}
     }
 
     /**
