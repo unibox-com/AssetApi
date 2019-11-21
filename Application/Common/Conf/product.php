@@ -31,7 +31,7 @@ return array(
     'redis_config' => array(
         'type' => 'redis',
         'host' => '172.22.0.2',
-        'port' => 6379,
+        'port' => 6389,
         'prefix'   => 'asset_',
     ),
 
