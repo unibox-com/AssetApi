@@ -30,6 +30,7 @@ class Redis extends Cache {
             'host'          => C('REDIS_HOST') ? : '127.0.0.1',
             'port'          => C('REDIS_PORT') ? : 6379,
             'timeout'       => C('DATA_CACHE_TIMEOUT') ? : false,
+			'password'      => C('REDIS_AUTH') ? : '',
             'persistent'    => false,
         ),$options);
 
