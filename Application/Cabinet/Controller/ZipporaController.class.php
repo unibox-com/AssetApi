@@ -1427,7 +1427,7 @@ class ZipporaController extends BaseController {
 		}
 		
 		//
-		$product=D('Product')->getMember($wh);
+		$product=D('Product')->getList($wh);
 		foreach($product as $k => $c) {
 			$wh=
 		    [
@@ -1435,7 +1435,7 @@ class ZipporaController extends BaseController {
 			 'product_status_code' => '1',
 			 'cabinet_id' => $this->_cabinetId,
 		    ];	
-			$Arr = D('ProductInventory')->getMember($wh);
+			$Arr = D('ProductInventory')->getList($wh);
 			foreach($Arr as $a => $b) {
 				$unitArr[$b['product_inventory_id']] = [
 			    'product_inventory_id' => $b['product_inventory_id'],
@@ -1458,9 +1458,7 @@ class ZipporaController extends BaseController {
 
       		
 		//
-		
-        //$unitArr = D('ProductInventory')->getProductInventoryArr1($wh,$memberId);
-		
+				
 		if(empty($unitArr)){
             $this->ret(3);
         }
