@@ -2311,7 +2311,11 @@ class ZipporaController extends BaseController {
 		if(empty($unitArr)){
             $this->ret(2);
         }
-		$wh['organization_id'] = $unitArr['organization_id'];
+	    $wh=
+		[
+		      'organization_id'=>$unitArr['organization_id'],
+		];
+
         $unitArr = D('ProductCategory')->getProductCategoryArrN($wh);
 		if(empty($unitArr)){
             $this->ret(3);
