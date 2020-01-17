@@ -1394,34 +1394,80 @@ class ZipporaController extends BaseController {
     public function getProductInventoryListN() {
 		$memberId     = I('request.memberId');
 		if(empty($memberId))  { $this->ret(4);}
-		
+		//
+		$wh=
+		[
+		  't.cabinet_id'=>$this->_cabinetId,
+		];
+		$organization=D('OOrganizationCabinet')->getMember($wh);
+		if(empty($organization))
+		{
+			$this->ret(5);
+		}
+		//
 		$categoryId = I('request.categoryId');
 		if(empty($categoryId))
 		{
-	 	 $wh=
+
+		 $wh=
 		 [
-		  //'o.category_id' => $categoryId,
-		  't.product_status_code' => '1',
-		  't.cabinet_id' => $this->_cabinetId,
-		 ];		
+           'organization_id' => $organization['organization_id'],
+		   
+		 ];	
+ 		 		 
 		}
 	    else
-        {			
- 		 $wh=
+        {
+		 $wh=
 		 [
-		  'o.category_id' => $categoryId,
-		  't.product_status_code' => '1',
-		  't.cabinet_id' => $this->_cabinetId,
-		 ];
+           'organization_id' => $organization['organization_id'],
+		   'category_id' => $categoryId,
+		 ];		
+
 		}
-        $unitArr = D('ProductInventory')->getProductInventoryArr1($wh,$memberId);
+		
+		//
+		$product=D('Product')->getMember($wh);
+		foreach($product as $k => $c) {
+			$wh=
+		    [
+             'product_id' => $c['product_id'],
+			 'product_status_code' => '1',
+			 'cabinet_id' => $this->_cabinetId,
+		    ];	
+			$Arr = D('ProductInventory')->getMember($wh);
+			foreach($Arr as $a => $b) {
+				$unitArr[$b['product_inventory_id']] = [
+			    'product_inventory_id' => $b['product_inventory_id'],
+			    'product_id' => $b['product_id'],
+                'cabinet_id' => $b['cabinet_id'],
+				'organization_id' => $b['organization_id'],
+				'member_id' => $b['member_id'],
+				'boxmodel_id' => $c['boxmodel_id'],
+                'rfid' => $b['rfid'],
+                'product_name' => $c['product_name'],
+                'brand' => $c['brand'],
+                'manufacturer' => $c['manufacturer'],
+                'box_id' => $b['box_id'],
+                'part_num' => $c['part_num'],
+				'product_image' => $c['product_image'],
+				'product_thumbnail' => $c['product_thumbnail'],
+              ];
+			}
+		}	
+
+      		
+		//
+		
+        //$unitArr = D('ProductInventory')->getProductInventoryArr1($wh,$memberId);
+		
 		if(empty($unitArr)){
             $this->ret(3);
         }
         $data = [
             'productList' => array_values($unitArr),
         ];
-
+        
         $this->ret(0, $data);
     }
 	
