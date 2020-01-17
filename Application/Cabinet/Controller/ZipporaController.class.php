@@ -1397,7 +1397,7 @@ class ZipporaController extends BaseController {
 		//
 		$wh=
 		[
-		  't.cabinet_id'=>$this->_cabinetId,
+		  'cabinet_id'=>$this->_cabinetId,
 		];
 		$organization=D('OOrganizationCabinet')->getMember($wh);
 		if(empty($organization))
