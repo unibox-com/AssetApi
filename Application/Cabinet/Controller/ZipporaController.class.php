@@ -1458,10 +1458,11 @@ class ZipporaController extends BaseController {
 
       		
 		//
-				
+		/*		
 		if(empty($unitArr)){
             $this->ret(3);
         }
+		*/
         $data = [
             'productList' => array_values($unitArr),
         ];
