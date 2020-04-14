@@ -5,6 +5,7 @@ use Think\Log\Driver;
 require_once(C('APPLICATION_PATH') . 'Common/Api/OSS/autoload.php');
 use OSS\OssClient;
 class Oss{
+	
     const _accessKeyId = '5LD75nsAFi0vCNIO';
     const _accessKeySecret = 'bnULyiddepFj8tDCoumODz8bJXTsT3';
     /**
