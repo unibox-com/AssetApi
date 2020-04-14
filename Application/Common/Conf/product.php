@@ -27,7 +27,10 @@ return array(
         'prefix'   => 'asset_',
         'expire'   => 600,
     ),
-
+	
+	'accessKeyId' => 'LTAI4FjKtGBey3e6yktSiHsA',
+	'accessKeySecret' => '31f423a983ca163cfbd2bacd',
+	
     'redis_config' => array(
         'type' => 'redis',
         'host' => '172.22.0.2',
