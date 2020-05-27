@@ -7,7 +7,7 @@
         }
     ],
     "require": {
-        "phpmailer/phpmailer": "^5.2",
+        "phpmailer/phpmailer": "^6.1",
         "authorizenet/authorizenet": "^1.9",
         "braintree/braintree_php": "^3.27"
     },
