@@ -150,6 +150,8 @@ class ProductModel extends Model{
 				'create_time' => $c['create_time'],
 				'update_time' => $c['update_time'],
 				'end_date' => $c['end_date'],
+				'cost' => $c['cost'],
+				'consumable' => $c['consumable'],
 				'available' => empty($unitArr) ? 1 : 0,
 				'delivered' => empty($unitArr1) ? 1 : 0,
             ];
@@ -187,6 +189,8 @@ class ProductModel extends Model{
 				'create_time' => $c['create_time'],
 				'update_time' => $c['update_time'],
 				'end_date' => $c['end_date'],
+				'cost' => $c['cost'],
+				'consumable' => $c['consumable'],
 				'available' => empty($unitArr) ? 1 : 0,
             ];
         }

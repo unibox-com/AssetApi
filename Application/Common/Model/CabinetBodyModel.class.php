@@ -21,7 +21,10 @@ class CabinetBodyModel extends Model{
             'addr' => $addr,
         ])->save();
     }
-
+    public function getBoxModelList($cabinetId)
+	{
+        return $this->where("cabinet_id=%d", $cabinetId)->select();
+    }
     public function insertBody($data){
         if ($this->create($data)) {
             return $this->add();
