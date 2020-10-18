@@ -2181,7 +2181,11 @@ class ZipporaController extends BaseController {
 			'product_status_code' => '1',
          );
 		$storeId = D('ProductInventory')->updateMember($wh,$inventory);
-		if(empty($storeId))       { $this->ret(7);}
+		if(empty($storeId))       
+		{ 
+		  D('CabinetBox')->releaseBox($boxId);
+		  $this->ret(7);
+		}
         //更新INVENTORY状态	
         /*
         //rental表插入新数据
