@@ -1927,8 +1927,8 @@ class ZipporaController extends BaseController {
 		$productname=D('Product')->getMember($wh1);
 		//
         $now = time();
-        //$holdTime = 86400;
-        //$pickCode = \Org\Util\String::randString(6, 2);
+        $holdTime = 86400;
+        $pickCode = \Org\Util\String::randString(6, 2);
         $rental = array(
             //'rental_id'
 			'organization_id' => $productinfo['organization_id'],
@@ -1937,8 +1937,8 @@ class ZipporaController extends BaseController {
 			'box_id' => $productinfo['box_id'],
 			'rfid' => $rfId,
             'member_id' => $memberId,
-			//'pickup_code' =>$pickCode,
-            //'expire_time' => $now + $holdTime,
+			'pickup_code' =>$pickCode,
+            'expire_time' => $now + $holdTime,
             'rental_time' => $now,
 			'rental_status_code'=>'3',
         );
@@ -1979,7 +1979,7 @@ class ZipporaController extends BaseController {
         //SMS notice && Email notice
         //$Notice = new \Common\Common\Notice();
         //$Notice->notice(C('NOTICE.NT_ASSET_RENT'), $memberId, [
-        //   'cabinet_id' => $this->_cabinetId,
+          // 'cabinet_id' => $this->_cabinetId,
 		   
         //]);
 		
