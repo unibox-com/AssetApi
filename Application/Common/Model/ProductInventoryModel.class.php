@@ -38,6 +38,7 @@ class ProductInventoryModel extends Model{
 		    ->alias('t') 
             ->field('
                 t.product_inventory_id,
+				t.barcode,
 				t.product_id,
 				t.cabinet_id,
 				t.organization_id,
@@ -96,6 +97,7 @@ class ProductInventoryModel extends Model{
 				'member_id' => $c['member_id'],
 				'boxmodel_id' => $c['boxmodel_id'],
                 'rfid' => $c['rfid'],
+				'barcode' => $c['barcode'],
 				'product_status_code' => $c['product_status_code'],
                 'product_name' => $c['product_name'],
                 'brand' => $c['brand'],
