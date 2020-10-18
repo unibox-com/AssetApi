@@ -309,7 +309,13 @@ class ZipporaController extends BaseController {
      * @apiUse identifyCardForReturn
      * @apiGroup 10-asset
      */
-	 
+	 /** asset
+     * @api {post} /zippora/identifyCardForReturnBarcode 021-identifyCardForReturnBarcode
+     * @apiDescription 识别产品信息身份通过ID卡
+     * @apiName identifyCardForReturnBarcode
+     * @apiUse identifyCardForReturnBarcode
+     * @apiGroup 10-asset
+     */
 	 /** asset
      * @api {post} /zippora/getProductInventoryList 03-getProductInventoryList
      * @apiDescription 得到产品列表
@@ -1295,7 +1301,115 @@ class ZipporaController extends BaseController {
 		
         $this->ret(0, $res);
     } 
-	
+	 //通过刷卡barcode找库存product信息 （资产柜新加）
+     /**
+     * @apiDefine identifyCardForReturnBarcode
+     * @apiParam {String} accessToken
+     * @apiParam {String} cardCode 产品ID卡号码
+     * @apiParam {String} inputflag 标志位 0、status=3 1、status=1 2、not care status 3、status=0 or 3
+     *
+     * @apiSuccess {Number} ret
+            '0' => 'identifyCard success',                                                     
+            '1' => 'invalid accesstoken',                                                      
+            '2' => 'empty card code',    
+            '3' => 'empty inputflag',                         
+            '4' => 'no matched product found',     
+            '5' => 'no matched product found in product table',			
+     * @apiSuccess {String} msg
+     * @apiSuccess {Object} data
+     * @apiSuccess {Object}   data.product
+     * @apiSuccess {String}     data.product.productId
+     * @apiSuccess {String}     data.product.productName
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *     "ret": 0,
+     *     "msg": "Identifycard Success",
+     *     "data": {
+     *         "product": {
+     *             "productId": "10001",
+     *             "productName": "Glass"
+     *         }
+     *     }
+     * }
+
+     * @sendSampleRequest
+     */
+     public function identifyCardForReturnBarcode() {
+        $cardCode = I('post.cardCode');
+        $inputflag = I('post.inputflag');
+        if(empty($cardCode))
+	    {
+           $this->ret(2);
+        }
+        if(empty($cardCode))
+	    {
+           $this->ret(3);
+        }
+        if($inputflag=='0')
+        {
+		 $wh=[
+		    'barcode' =>$cardCode,
+			'product_status_code'=>'3',
+            ];
+			$courier = D('ProductInventory')->getMember($wh);
+        }
+        else if($inputflag=='1')
+        {
+            $wh=[
+                'barcode' =>$cardCode,
+                'product_status_code'=>'0',
+                ]; 
+				$courier = D('ProductInventory')->getMember($wh);
+        }
+        else if($inputflag=='2')
+        {
+
+            $wh=[
+                'barcode' =>$cardCode,
+                ]; 
+				$courier = D('ProductInventory')->getMember($wh);
+        }   
+        else if($inputflag=='3')
+        {
+			$wh1=[
+                'barcode' =>$cardCode,
+				'product_status_code' => '0',
+                ];
+		    $wh2=[
+                'barcode' =>$cardCode,
+				'product_status_code' => '3',
+                ];	
+			$wh['_complex'] = array(
+              $wh1,
+              $wh2,
+              '_logic' => 'or'
+            );            				
+		    $courier = D('ProductInventory')->getMember($wh);
+        }  
+        if($courier) {
+			//$res['product']      = $courier;
+			$res['product']['product_inventory_id'] = $courier['product_inventory_id'];
+			$res['product']['product_id'] = $courier['product_id'];
+			$res['product']['organization_id'] = $courier['organization_id'];
+			$res['product']['member_id'] = $courier['member_id'];
+			//$res['product']['boxmodel_id'] = $courier['boxmodel_id'];
+			$res['product']['barcode'] = $courier['barcode'];
+        } else {
+            $this->ret(4);
+        }
+		 $wh=[
+                'product_id' =>$courier['product_id'],
+             ];
+		$courier = D('Product')->getMember($wh);
+		if($courier) {
+			$res['product']['boxmodel_id'] = $courier['boxmodel_id'];
+        } else {
+            $this->ret(5);
+        }
+		
+        $this->ret(0, $res);
+    } 
 	 /**得到库存产品列表（资产柜新加）
      * @apiDefine getProductInventoryList
      * @apiParam {String}   accessToken
