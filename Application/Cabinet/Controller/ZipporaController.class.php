@@ -373,6 +373,14 @@ class ZipporaController extends BaseController {
      */
 
 	 /** asset
+     * @api {post} /zippora/commitForAssetReturnBarcode 08-commitForAssetReturnBarcode
+     * @apiDescription 归还产品确认
+     * @apiName commitForAssetReturnBarcode
+     * @apiUse commitForAssetReturnBarcode
+     * @apiGroup 10-asset
+     */
+
+	 /** asset
      * @api {post} /zippora/commitForAssetAdmin 13-commitForAssetAdmin
      * @apiDescription 归还产品确认
      * @apiName commitForAssetAdmin
@@ -2220,7 +2228,167 @@ class ZipporaController extends BaseController {
             'return' => $store,
         ]);
     }
+	 /**租借人归还提交（资产柜新加）
+     * @apiDefine commitForAssetReturnBarcode 
+     * @apiParam {String} accessToken
+     * @apiParam {String} rfId           产品barcode
+     * @apiParam {String} boxId          箱体号
+     *
+     * @apiSuccess {Number} ret
+            '0' => 'commitForRent success',                                      
+            '1' => 'invalid accesstoken',                                      
+            '2' => 'empty rf id',  
+            '3' => 'empty box id', 	
+            '4' => 'fail occupyBox', 
+            '5' => 'no this pruduct',
+            '7' => 'fail uptate Inventory',	
+     * @apiSuccess {String} msg
+     * @apiSuccess {Object} data
+     * @apiSuccess {Object} data.rent
+     * @apiSuccess {String}   data.rent.rentalId
+     * @apiSuccess {String}   data.rent.memberId
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *     "ret": 0,
+     *     "msg": "commitForAssetRent Success",
+     *     "data": {
+     *         "rent": {
+     *             "rentalIdId": "10007",
+     *             "memberId": "10001",
+     *         }
+     *     }
+     * }
+     * @sendSampleRequest
+     */
+    public function commitForAssetReturnBarcode() 
+	{
 
+        $rfId    = I('request.rfId');
+		$boxId    = I('request.boxId');
+        
+        if(empty($rfId ))  { $this->ret(2);}
+        if(empty($boxId ))  { $this->ret(3);}
+  
+
+        $now = time();
+        $pickCode = \Org\Util\String::randString(6, 2);
+        $holdTime = 86400;
+
+        $rental = array(
+            //'rental_id'	
+			//'rfid' => $rfId,
+            'return_time' => $now,
+			'rental_status_code'=>'1',
+			'return_locker_id'=>$this->_cabinetId,
+        );
+
+		$wh=[
+		   'rfid'=> $rfId,
+		   'rental_status_code'=>'3',
+         ];
+       
+        $rentalIdold = D('ProductRental')->getMember($wh);
+        //更新rental
+        $rentalId = D('ProductRental')->updateMember($wh,$rental);
+        //if(empty($rentalId ))  { $this->ret(5);}
+        //发邮件通知
+		if(empty($rentalId ))
+		{}
+	    else 
+		{
+		  //发邮件
+	      // async send notice
+        /*           S(C('redis_config'))->proxy('RPUSH', 'async_notice', json_encode([
+            'notice_tpl' => C('NOTICE.NT_ASSET_RETURN'),
+            'member_id' =>$rentalId['member_id'],
+            'data' => [
+                'cabinet_id' => $this->_cabinetId,
+             //   'pick_code' => $pickCode,
+            ]
+           ]));	 
+		   */
+		    //SMS notice && Email notice
+            $Notice = new \Common\Common\Notice();
+            $Notice->notice(C('NOTICE.NT_ASSET_RETURN'), $rentalIdold['member_id'], [
+           'cabinet_id' => $this->_cabinetId,
+		   
+           ]);
+		}
+        //		
+        //拥有BOXID
+        if(empty(D('CabinetBox')->occupyBox($boxId))) {
+            $this->ret(4);
+        }
+
+
+
+        //
+		//$pickCode = \Org\Util\String::randString(6, 2);
+			//更新INVENTORY状态
+		//$wh=['rfid'=>$rfId,'product_status_code' => '3',];
+		//$wh=['rfid'=>$rfId,];
+		$wh1=[
+                'barcode' =>$rfId,
+				'product_status_code' => '0',
+                ];
+		$wh2=[
+                'barcode' =>$rfId,
+				'product_status_code' => '3',
+                ];	
+	    $wh['_complex'] = array(
+              $wh1,
+              $wh2,
+              '_logic' => 'or'
+            ); 
+		$inventory = array(
+            //'inventory_id'
+            'box_id'=>$boxId,	
+            'cabinet_id'=>$this->_cabinetId,			
+			'member_id'=>'0',
+            'update_time' => $now,
+			'product_status_code' => '1',
+         );
+		$storeId = D('ProductInventory')->updateMember($wh,$inventory);
+		if(empty($storeId))       
+		{ 
+		  D('CabinetBox')->releaseBox($boxId);
+		  $this->ret(7);
+		}
+        //更新INVENTORY状态	
+        /*
+        //rental表插入新数据
+        $wh=['rfid'=>$rfId,];
+        $storeId =D('ProductInventory')->getMember($wh);
+		if(empty($storeId))
+        //
+        { $this->ret(8);}
+        //rental表插入新初始化数据
+        $rental = array(
+            //'rental_id'	
+			'product_inventory_id' => $storeId['product_inventory_id'],
+			'organization_id' => $storeId['organization_id'],
+            'cabinet_id' => $this->_cabinetId,
+			'rfid' => $rfId,
+            'box_id' => $boxId ,
+			'pickup_code' =>$pickCode,
+			'rental_status_code' =>'0',
+         );
+         $rentalId = D('ProductRental')->insertMember($rental);
+		 if(empty($rentalId))       { $this->ret(9);}
+		*/
+        //
+        $store = [
+            'box_id'=>$boxId,
+            'return_time' => $now,
+			'rental_status_code'=>'1',
+			'return_locker_id'=>$this->_cabinetId,
+        ];
+
+        $this->ret(0, [
+            'return' => $store,
+        ]);
+    }
 	 /**管理员归还预分配柜子（资产柜新加）
      * @apiDefine preAuthForAdmin 
      * @apiParam {String} accessToken
