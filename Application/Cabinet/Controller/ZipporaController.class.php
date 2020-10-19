@@ -1533,7 +1533,7 @@ class ZipporaController extends BaseController {
 
 		 $wh=
 		 [
-           'organization_id' => $organization['organization_id'],
+           't.organization_id' => $organization['organization_id'],
 		   
 		 ];	
  		 		 
@@ -1542,8 +1542,8 @@ class ZipporaController extends BaseController {
         {
 		 $wh=
 		 [
-           'organization_id' => $organization['organization_id'],
-		   'category_id' => $categoryId,
+           't.organization_id' => $organization['organization_id'],
+		   'o.category_id' => $categoryId,
 		 ];		
 
 		}
@@ -1578,15 +1578,15 @@ class ZipporaController extends BaseController {
 			// }
 		// }	
 		$wh1=[
-		        't.cabinet_id'=>$cabinetId ,
+		        
 		        't.product_status_code' => '1',
                 ];
 		$wh2=[
-		        't.cabinet_id'=>$cabinetId ,
+		      
 		        't.product_status_code' => '3',
                 ];	
 		$wh3=[
-		        't.cabinet_id'=>$cabinetId ,
+		        
 		        't.product_status_code' => '0',
 				'o.orderable' => '1',
             ];	
