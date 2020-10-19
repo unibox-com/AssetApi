@@ -1549,38 +1549,56 @@ class ZipporaController extends BaseController {
 		}
 		
 		//
-		$product=D('Product')->getList($wh);
-		foreach($product as $k => $c) {
-			$wh=
-		    [
-             'product_id' => $c['product_id'],
-			 'product_status_code' => '1',
-			 'cabinet_id' => $this->_cabinetId,
-		    ];	
-			$Arr = D('ProductInventory')->getList($wh);
-			foreach($Arr as $a => $b) {
-				$unitArr[$b['product_inventory_id']] = [
-			    'product_inventory_id' => $b['product_inventory_id'],
-			    'product_id' => $b['product_id'],
-                'cabinet_id' => $b['cabinet_id'],
-				'organization_id' => $b['organization_id'],
-				'member_id' => $b['member_id'],
-				'boxmodel_id' => $c['boxmodel_id'],
-                'rfid' => $b['rfid'],
-                'product_name' => $c['product_name'],
-                'brand' => $c['brand'],
-                'manufacturer' => $c['manufacturer'],
-                'box_id' => $b['box_id'],
-                'part_num' => $c['part_num'],
-				'product_image' => $c['product_image'],
-				'product_thumbnail' => $c['product_thumbnail'],
-              ];
-			}
-		}	
-
+		// $product=D('Product')->getList($wh);
+		// foreach($product as $k => $c) {
+			// $wh=
+		    // [
+             // 'product_id' => $c['product_id'],
+			 // 'product_status_code' => '1',
+			 // 'cabinet_id' => $this->_cabinetId,
+		    // ];	
+			// $Arr = D('ProductInventory')->getList($wh);
+			// foreach($Arr as $a => $b) {
+				// $unitArr[$b['product_inventory_id']] = [
+			    // 'product_inventory_id' => $b['product_inventory_id'],
+			    // 'product_id' => $b['product_id'],
+                // 'cabinet_id' => $b['cabinet_id'],
+				// 'organization_id' => $b['organization_id'],
+				// 'member_id' => $b['member_id'],
+				// 'boxmodel_id' => $c['boxmodel_id'],
+                // 'rfid' => $b['rfid'],
+                // 'product_name' => $c['product_name'],
+                // 'brand' => $c['brand'],
+                // 'manufacturer' => $c['manufacturer'],
+                // 'box_id' => $b['box_id'],
+                // 'part_num' => $c['part_num'],
+				// 'product_image' => $c['product_image'],
+				// 'product_thumbnail' => $c['product_thumbnail'],
+              // ];
+			// }
+		// }	
+		$wh1=[
+		        't.cabinet_id'=>$cabinetId ,
+		        't.product_status_code' => '1',
+                ];
+		$wh2=[
+		        't.cabinet_id'=>$cabinetId ,
+		        't.product_status_code' => '3',
+                ];	
+		$wh3=[
+		        't.cabinet_id'=>$cabinetId ,
+		        't.product_status_code' => '0',
+				'o.orderable' => '1',
+            ];	
+	    $wh['_complex'] = array(
+              $wh1,
+              $wh2,
+			  $wh3,
+              '_logic' => 'or'
+            ); 
       		
 		//
-				
+	    $unitArr = D('ProductInventory')->getProductInventoryArrOrder($wh);	
 		if(empty($unitArr)){
             $this->ret(3);
         }

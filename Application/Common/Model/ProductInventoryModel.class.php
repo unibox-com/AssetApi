@@ -59,7 +59,35 @@ class ProductInventoryModel extends Model{
             ->where($wh)->select();
          return $mem;
     }
-	
+	//加入ORDERABLE
+	public function getProductInventoryListNOrder($wh = array()){
+		$mem = $this
+		    ->alias('t') 
+            ->field('
+                t.product_inventory_id,
+				t.barcode,
+				t.product_id,
+				t.cabinet_id,
+				t.organization_id,
+				t.member_id,
+                o.boxmodel_id,
+                t.rfid,
+				t.product_status_code,
+                o.product_name as product_name,
+                o.brand as brand,
+				o.orderable as orderable,
+                o.manufacturer as manufacturer,
+                o.part_num as part_num,
+                t.box_id as box_id,
+				o.product_image,
+				o.product_thumbnail
+            ')
+            ->join('left join product as o on t.product_id = o.product_id')
+//            ->join('left join product_rental as b on t.product_inventory_id = b.product_inventory_id and b.rental_status_code=0')
+            ->where($wh)->select();
+         return $mem;
+    }
+	//
 	//通过产品类别返回库存信息
 	public function getProductInventoryListN1($wh = array()){
 		$mem = $this
@@ -110,6 +138,34 @@ class ProductInventoryModel extends Model{
         }
         return $arr;
     }
+	//搜出可预定
+	public function getProductInventoryArrOrder($wh = array()){
+        $list = $this->getProductInventoryListNOrder($wh);
+        foreach($list as $k => $c) {
+			
+            $arr[$c['product_id']] = [
+			    'product_inventory_id' => $c['product_inventory_id'],
+			    'product_id' => $c['product_id'],
+                'cabinet_id' => $c['cabinet_id'],
+				'organization_id' => $c['organization_id'],
+				'member_id' => $c['member_id'],
+				'boxmodel_id' => $c['boxmodel_id'],
+                'rfid' => $c['rfid'],
+				'barcode' => $c['barcode'],
+				'product_status_code' => $c['product_status_code'],
+                'product_name' => $c['product_name'],
+                'brand' => $c['brand'],
+                'manufacturer' => $c['manufacturer'],
+                'box_id' => $c['box_id'],
+                'part_num' => $c['part_num'],
+				'product_image' => $c['product_image'],
+				'product_thumbnail' => $c['product_thumbnail'],
+				'orderable' => $c['orderable'],
+            ];
+        }
+        return $arr;
+    }
+	//
 	public function getProductInventoryArr1($wh = array(),$memberid){
         $list = $this->getProductInventoryListN1($wh);
         foreach($list as $k => $c) {
