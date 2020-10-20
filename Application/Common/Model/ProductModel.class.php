@@ -154,7 +154,38 @@ class ProductModel extends Model{
 				'consumable' => $c['consumable'],
 				'available' => empty($unitArr) ? 1 : 0,
 				'delivered' => empty($unitArr1) ? 1 : 0,
+				'orderable' => 0,
             ];
+		  }
+		  else
+		  {
+			  if($c['orderable']=='1')
+			  {
+				 $arr[$c['product_id']] = [
+                'product_id' => $c['product_id'],
+                'product_name' => $c['product_name'],
+				'category_id' => $c['category_id'],
+				'boxmodel_id' => $c['boxmodel_id'],
+				'brand' => $c['brand'],
+				'manufacturer' => $c['manufacturer'],
+				'uom' => $c['uom'],
+				'part_num' => $c['part_num'],
+				'model_num' => $c['model_num'],
+				'is_public' => $c['is_public'],
+				'product_desc' => $c['product_desc'],
+				'product_image' => $c['product_image'],
+				'product_thumbnail' => $c['product_thumbnail'],
+				'instruction' => $c['instruction'],
+				'create_time' => $c['create_time'],
+				'update_time' => $c['update_time'],
+				'end_date' => $c['end_date'],
+				'cost' => $c['cost'],
+				'consumable' => $c['consumable'],
+				'available' => empty($unitArr) ? 1 : 0,
+				'delivered' => empty($unitArr1) ? 1 : 0,
+				'orderable' =>1,
+               ];
+			  }	  
 		  }
         }
         return $arr;
