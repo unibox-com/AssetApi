@@ -2533,7 +2533,7 @@ class ZipporaController extends BaseController {
 		 /**得到产品列表（资产柜新加）
      * @apiDefine getProductListN
      * @apiParam {String}   accessToken
-     * @apiParam {String}   organizationId 公寓ID，这里是所有者
+     * @apiParam {String}   categoryId
      * @apiParam {String}   rentmemberId 
      *
      * @apiSuccess {Number} ret
@@ -2597,16 +2597,35 @@ class ZipporaController extends BaseController {
      */
     public function getProductListN() {
   
-          
-        $apartmentId = I('request.organizationId');
         $rentmemberId = I('request.rentmemberId');
-        if(empty($apartmentId)){
-            $this->ret(2);
-        }
-		$wh['organization_id'] = $apartmentId;
+		$categoryId = I('request.categoryId');
+		//
+		$wh=
+		[
+		  'cabinet_id'=>$this->_cabinetId,
+		];
+		$organization=D('OOrganizationCabinet')->getMember($wh);
+	    if(empty($organization))
+		{
+			$this->ret(1);
+		}
+		//
+		if(empty($categoryId))
+		{
+			$wh['organization_id'] = $organization['organization_id'];
+		}
+		else
+		{
+	      $wh=
+		  [
+           'organization_id' => $organization['organization_id'],
+		   'category_id' => $categoryId,
+		  ];	
+		}	
+		
         $unitArr = D('Product')->getProductArrN1($wh,$rentmemberId);
 		if(empty($unitArr)){
-            $this->ret(3);
+            $this->ret(2);
         }
         $data = [
             'productList' => array_values($unitArr),
