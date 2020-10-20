@@ -152,9 +152,10 @@ class ProductModel extends Model{
 				'end_date' => $c['end_date'],
 				'cost' => $c['cost'],
 				'consumable' => $c['consumable'],
-				'available' => empty($unitArr) ? 1 : 0,
-				'delivered' => empty($unitArr1) ? 1 : 0,
+				'available' => empty($unitArr) ? 0: 1,
+				'delivered' => empty($unitArr1) ? 0 : 1,
 				'orderable' => 0,
+				'box_id' =>empty($unitArr) ? 0: $unitArr['box_id'],
             ];
 		  }
 		  else
@@ -184,6 +185,7 @@ class ProductModel extends Model{
 				'available' => empty($unitArr) ? 1 : 0,
 				'delivered' => empty($unitArr1) ? 1 : 0,
 				'orderable' =>1,
+				'box_id' =>0,
                ];
 			  }	  
 		  }
