@@ -425,7 +425,15 @@ class ZipporaController extends BaseController {
      * @apiUse getProductList
      * @apiGroup 10-asset
      */	
-
+	 
+	 /** asset
+     * @api {post} /zippora/getProductListN 10-getProductListN
+     * @apiDescription 得到产品列表
+     * @apiName getProductListN
+     * @apiUse getProductListN
+     * @apiGroup 10-asset
+     */	
+	 
 	 /** asset
      * @api {post} /zippora/getProductInfo 11-getProductInfo
      * @apiDescription 得到产品列表
@@ -2512,6 +2520,94 @@ class ZipporaController extends BaseController {
         }
 		$wh['organization_id'] = $apartmentId;
         $unitArr = D('Product')->getProductArr($wh);
+		if(empty($unitArr)){
+            $this->ret(3);
+        }
+        $data = [
+            'productList' => array_values($unitArr),
+        ];
+
+        $this->ret(0, $data);
+    }
+	//
+		 /**得到产品列表（资产柜新加）
+	 * @api {get} /asset/getProductList 05-getProductListN
+     * @apiDescription 得到产品列表
+     * @apiName getProductListN
+     *
+     * @apiParam {String}   _accessToken
+     * @apiParam {String}   _memberId 
+	 * @apiParam {String} organizationId 所有者ID号
+     *
+     * @apiSuccess {Number} ret
+     * @apiSuccess {String} msg
+            '0' => 'get product list success',                      
+            '1' => 'invalid accesstoken',  
+            '2' => 'invalid organization id', 			
+            '3' => 'no product', 			
+     * @apiSuccess {Object} data
+     * @apiSuccess {Object[]} data.productList
+     * @apiSuccess {Object}     data.productList.product
+     * @apiSuccess {String}     data.productList.product.product_id
+     * @apiSuccess {String}     data.productList.product.organization_id
+	 * @apiSuccess {String}     data.productList.product.product_name
+     * @apiSuccess {String}     data.productList.product.category_id
+	 * @apiSuccess {String}     data.productList.product.boxmodel_id
+     * @apiSuccess {String}     data.productList.product.brand
+	 * @apiSuccess {String}     data.productList.product.manufacturer
+     * @apiSuccess {String}     data.productList.product.uom
+	 * @apiSuccess {String}     data.productList.product.part_num
+     * @apiSuccess {String}     data.productList.product.model_num
+	 * @apiSuccess {String}     data.productList.product.is_public
+     * @apiSuccess {String}     data.productList.product.product_desc
+	 * @apiSuccess {String}     data.productList.product.product_image
+     * @apiSuccess {String}     data.productList.product.product_thumbnail
+	 * @apiSuccess {String}     data.productList.product.create_time
+     * @apiSuccess {String}     data.productList.product.update_time
+	 * @apiSuccess {String}     data.productList.product.end_date
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * {
+     *     "ret": 0,
+     *     "msg": "Get Product List Success",
+     *     "data": {
+     *         "productList": [
+     *             {
+     *              "product_id": "203",
+     *              "organization_id": "10002",
+     *              "product_name": "samsung camera2345",
+     *              "category_id": "1",
+     *              "boxmodel_id": "10001",
+     *              "brand": "",
+     *              "manufacturer": "31313",
+     *              "uom": "",
+     *              "part_num": null,
+     *              "model_num": null,
+     *              "is_public": null,
+     *              "product_desc": "213123",
+     *              "product_image": "uploads/kIUUBT9OvC2iN-NQoV4T_3WZgbbf10I6.jpg",
+     *              "product_thumbnail": "uploads/thumb/kIUUBT9OvC2iN-NQoV4T_3WZgbbf10I6.jpg",
+     *              "instruction": "",
+     *              "create_time": "1563069062",
+     *              "update_time": "1563165281",
+     *              "end_date": null,
+	 *              "available": 1
+     *             },
+     *         ]
+     *     }
+     * }
+     * @apiSampleRequest
+     */
+    public function getProductListN() {
+  
+          
+        $apartmentId = I('request.organizationId');
+
+        if(empty($apartmentId)){
+            $this->ret(2);
+        }
+		$wh['organization_id'] = $apartmentId;
+        $unitArr = D('Product')->getProductArrN1($wh,$this->_memberId);
 		if(empty($unitArr)){
             $this->ret(3);
         }
