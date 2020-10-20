@@ -156,6 +156,7 @@ class ProductModel extends Model{
 				'delivered' => empty($unitArr1) ? 0 : 1,
 				'orderable' => 0,
 				'box_id' =>empty($unitArr) ? 0: $unitArr['box_id'],
+				'rfid' =>empty($unitArr) ? 0: $unitArr['rfid'],
             ];
 		  }
 		  else
@@ -186,6 +187,7 @@ class ProductModel extends Model{
 				'delivered' => empty($unitArr1) ? 1 : 0,
 				'orderable' =>1,
 				'box_id' =>0,
+				'rfid' =>'',
                ];
 			  }	  
 		  }
