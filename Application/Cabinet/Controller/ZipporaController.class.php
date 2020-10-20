@@ -2531,13 +2531,10 @@ class ZipporaController extends BaseController {
     }
 	//
 		 /**得到产品列表（资产柜新加）
-	 * @api {get} /asset/getProductList 05-getProductListN
-     * @apiDescription 得到产品列表
-     * @apiName getProductListN
-     *
-     * @apiParam {String}   _accessToken
-     * @apiParam {String}   _memberId 
-	 * @apiParam {String} organizationId 所有者ID号
+     * @apiDefine getProductListN
+     * @apiParam {String}   accessToken
+     * @apiParam {String}   organizationId 公寓ID，这里是所有者
+     * @apiParam {String}   rentmemberId 
      *
      * @apiSuccess {Number} ret
      * @apiSuccess {String} msg
@@ -2602,12 +2599,12 @@ class ZipporaController extends BaseController {
   
           
         $apartmentId = I('request.organizationId');
-
+        $rentmemberId = I('request.rentmemberId');
         if(empty($apartmentId)){
             $this->ret(2);
         }
 		$wh['organization_id'] = $apartmentId;
-        $unitArr = D('Product')->getProductArrN1($wh,$this->_memberId);
+        $unitArr = D('Product')->getProductArrN1($wh,$rentmemberId);
 		if(empty($unitArr)){
             $this->ret(3);
         }
