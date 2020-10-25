@@ -2612,7 +2612,7 @@ class ZipporaController extends BaseController {
 		//
 		if(empty($categoryId))
 		{
-			$wh['organization_id'] = $organization['organization_id'];
+		  $wh['organization_id'] = $organization['organization_id'];
 		}
 		else
 		{
@@ -2623,7 +2623,8 @@ class ZipporaController extends BaseController {
 		  ];	
 		}	
 		
-        $unitArr = D('Product')->getProductArrN1($wh,$rentmemberId);
+         $unitArr = D('Product')->getProductArrN1($wh,$rentmemberId);
+         //$unitArr = D('Product')->getProductArrN1($wh,'33935');
 		if(empty($unitArr)){
             $this->ret(2);
         }
@@ -2632,6 +2633,7 @@ class ZipporaController extends BaseController {
         ];
 
         $this->ret(0, $data);
+        //$this->ret(0, $rentmemberId);
     }
 	 /**得到产品类别列表（资产柜新加）
      * @apiDefine getCategoryList
