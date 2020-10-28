@@ -2623,8 +2623,8 @@ class ZipporaController extends BaseController {
 		  ];	
 		}	
 		
-         $unitArr = D('Product')->getProductArrN1($wh,$rentmemberId);
-         //$unitArr = D('Product')->getProductArrN1($wh,'33935');
+         //$unitArr = D('Product')->getProductArrN1($wh,$rentmemberId);
+         $unitArr = D('Product')->getProductArrN1($wh,'33935');
 		if(empty($unitArr)){
             $this->ret(2);
         }
