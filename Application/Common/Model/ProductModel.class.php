@@ -131,7 +131,6 @@ class ProductModel extends Model{
               '_logic' => 'or'
             ); 
 			$unitArr1 = D('ProductInventory')->getMember($wh5);
-			
             $arr[$c['product_id']] = [
                 'product_id' => $c['product_id'],
                 'product_name' => $c['product_name'],
@@ -154,11 +153,12 @@ class ProductModel extends Model{
 				'consumable' => $c['consumable'],
 				'available' => empty($unitArr) ? 1: 0,
 				'delivered' => empty($unitArr1) ? 1 : 0,
-				'orderable' => 0,
+				'orderable' => $c['orderable'],
 				'box_id' =>empty($unitArr) ? '0': $unitArr['box_id'],
 				'rfid' =>empty($unitArr) ? '0': $unitArr['rfid'],
             ];
 		  }
+		  /*
 		  else
 		  {
 			  if($c['orderable']=='1')
@@ -191,6 +191,7 @@ class ProductModel extends Model{
                ];
 			  }	  
 		  }
+		  */
         }
         return $arr;
 
