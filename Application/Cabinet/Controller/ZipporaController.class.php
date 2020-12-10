@@ -3493,7 +3493,10 @@ class ZipporaController extends BaseController {
         foreach($storeList as $sto) {
 			//
             $box = D('CabinetBox')->getBodyBox($sto['box_id']);
-			$wh3=$sto['product_id'];
+			//$wh3=$sto['product_id'];
+			$wh3=[
+		      'product_id' => $sto['product_id'],
+		    ];
 			$product= D('Product')->getMember($wh3);
             $res['pickList'][] = [
 			    'productname' =>$product['product_name'],
